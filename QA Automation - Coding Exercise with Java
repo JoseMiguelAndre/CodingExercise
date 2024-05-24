@@ -1,0 +1,65 @@
+package EsteeLuaderCodingExercise;
+
+import org.testng.annotations.Test;
+
+import com.beust.jcommander.internal.Console;
+
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.AfterClass;
+
+import java.time.Duration;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class EsteeLauderCodingExercise {
+	  WebDriver driver;
+	  
+	  By WhatsNewBreadcrumb = By.xpath("//div[@class=\"BasicMenuref_basic-menu__RMAe_ group basic-menu__group\"]//a[contains(text(),\"WHAT\")]");
+	  By ItemInWhatsNew = By.xpath("//div[@class=\"font-bold leading-[1.25rem] product-price font-akzidenzgrotesk text-15px text-navy\"][contains(text(),\"70\")]");
+	  By SearchButton = By.xpath("//div[@class=\"flex items-center px-20px min-w-[44px]\"]//button[@aria-label=\"Search Again\"]");
+	  By ItemSearching = By.name("search-input");
+	  By SeeAllResultsButton = By.xpath("//button[@aria-label=\"See All Results\"]");
+	  
+	  
+	  @BeforeClass
+	  public void beforeClass() {
+		  System.setProperty("webdriver.chrome.ChromeDriver", "C:\\Users\\Hp\\OneDrive\\Documents\\Selenium WebDiver\\drivers\\chromedriver.exe");
+		  driver = new ChromeDriver();
+		  driver.get("https://www.esteelauder.com/");
+	  }
+	
+@Test(priority=0)
+public void GettingItemandPrice() throws InterruptedException {
+	 Thread.sleep(5000);
+	 
+	 //Getting price
+	 driver.findElement(WhatsNewBreadcrumb).click();
+	 driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
+	 
+	 if(driver.findElement(ItemInWhatsNew).isDisplayed()) {
+		 String MakeupItem = driver.findElement(ItemInWhatsNew).getText();
+		 
+		 System.out.println("Makeup price is: " + MakeupItem);
+	 }else{
+		 System.out.println("Text has not been found");
+	 }
+	
+	 //Getting item	 
+	driver.findElement(SearchButton).click();
+	driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
+	
+	driver.findElement(ItemSearching).sendKeys("Revitalizing Supreme+ Moisturizer Day to Night");
+	driver.findElement(SeeAllResultsButton).click();
+	 
+}
+
+
+@AfterClass
+public void afterClass() {
+	 driver.close();
+}
+
+}

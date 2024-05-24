@@ -1,0 +1,52 @@
+import selenium
+import os
+import time
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+
+
+
+URL = 'https://www.esteelauder.com'
+
+driver = webdriver.Chrome()
+
+driver.maximize_window()
+driver.get(URL)
+
+#Find on Home Page "WHAT'S NEW"
+FirstBreadcrumbText = driver.find_element(By.XPATH,'//div[@class="BasicMenuref_basic-menu__RMAe_ group basic-menu__group"]//a[contains(text(),"WHAT")]')
+FirstBreadcrumbText.click()
+
+time.sleep(2)
+
+#Close pop-up
+RewardPopUp = driver.find_element(By.XPATH,'//div[@aria-label="Join Estée E-List Loyalty Panel"]//button[@aria-label="Close"]')
+RewardPopUp.click()
+
+#Locating "Best Sellers" text
+BestSellersText = driver.find_element(By.XPATH,'//h1[@class="font-optimadisplaylight mb-0 md:mb-[5px] mx-auto text-navy md:max-w-[768px] text-[40px] tracking-[-.02em] text-center leading-[45px]"]')
+BestSellersText.is_displayed()
+
+
+#Get list of items
+print("Items list: ")
+for item in driver.find_elements(By.XPATH,'//h2//a[@class="cursor-pointer"]'):
+    print(item.get_attribute("textContent"))
+
+#Sign in
+SignIn = driver.find_element(By.CLASS_NAME,'signed-out-link__content').click()
+time.sleep(2)
+EmailAddress = driver.find_element(By.ID, "form--signin--field--EMAIL_ADDRESS").send_keys("testemail@test.com")
+SignInButton = driver.find_element(By.XPATH,'//input[@data-test-id="form_signin_continue"]').click()
+time.sleep(2)
+
+print("_____________________________")
+
+ExpectedMessage = "Please enter your password."
+
+EnterPasswordMessage = driver.find_element(By.XPATH,'//li[@id="required.password.signin"]')
+assert EnterPasswordMessage.text == ExpectedMessage
+print("Expected message: " + ExpectedMessage)
+print("Message found: " + EnterPasswordMessage.text)
+
+driver.quit()
